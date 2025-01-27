@@ -47,16 +47,28 @@ app.post("/ujregio", (req, res) =>{
 })
 
 app.post("/ujregiok", (req, res)=> {
-    const sql = "INSERT INTO `regiok` (`Rid`, `regionev`, `regio_tipusa`) VALUES ('', ?, ?)"
-    const values = [['12', 'Bugyi', 'Város'],['13','Hernád','Kisváros']]
+    const sql = "INSERT INTO `regiok` (`Rid`, `regionev`, `regio_tipusa`) VALUES (?, ?, ?)"
+    const values = [
+        '12', 'Bugyi', 'Város',
+        '13','Hernád','Város',
+        '14', 'Blaha','Város'
+    ]
 
-    db.query(sql,[values], (err,result) =>{
+    db.query(sql,values, (err,result) =>{
         if(err){
             console.error("hiba tortent",err)
             return res.status(500).json({error: "hiba történt"})
         }
 
         return res.status(200).json({message:"sikeres beszúrás", result})
+    })
+})
+
+app.delete("/torles/:id", (req, res) => {
+    const sql = "DELETE FROM regiok WHERE `regiok`.`Rid` = ?"
+    db.query(sql, [req.params.id], (err,result)=>{
+        if (err) return res.json(err)
+        return res.json(result)
     })
 })
 
